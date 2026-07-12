@@ -5,19 +5,22 @@ Import-Module .\Modules\Exchange.psm1
 Write-Host "Main.ps1 started"
 
 $request = @{
-    ResourceType = "Microsoft365Group",
-    Name= "HR Group",
-    Description= "This group's purpose is to.....",
-    Ownermail = "owner@company.com",
-    Memebers = [
+    RequestType = "Microsoft365Group"
+    Name= "HR Group"
+    Description= "This group's purpose is to....."
+    Ownermail = "owner@company.com"
+    Members = @(
     "user1@company.com",
     "user2@company.com",
     "user3@company.com"
-    ],
+    )
     GroupType= "Microsoft365Group"
 }
 
-Test-RequestPayload -Request $request
+if (Test-RequestPayload -Request $request)
+{
+    Write-Host "Validation Passed."
+}
 
 
 Connect-ExchangeService
