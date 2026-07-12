@@ -1,5 +1,6 @@
 Import-Module .\Modules\Graph.psm1
 Import-Module .\Modules\Validation.psm1
+Import-Module .\Modules\Exchange.psm1
 
 Write-Host "Main.ps1 started"
 
@@ -17,6 +18,20 @@ $request = @{
 }
 
 Test-RequestPayload -Request $request
+
+
+Connect-ExchangeService
+
+if(Test-ExchangeConnection)
+{
+    Write-Host "Exchange Test Passed!"
+ }
+
+else
+{
+    Write-Host "Exchange Test Failure..."
+}
+
 
 Connect-GraphService
 
