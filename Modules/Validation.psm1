@@ -70,21 +70,22 @@ function Test-RequestPayload {
   }
     
 
-  if (:IsNullORWhiteSpace($Request.Name))  {
+  if (:IsNullOrWhiteSpace($Request.Name))  {
       throw "Name is Required."
       }
   
-  if (:IsNullORWhiteSpace($Request.Description))  {
+  if (:IsNullOrWhiteSpace($Request.Description))  {
       throw "Description is Required."
       }    
 
-  $EmailPattern = '^[^@\s]+@[^@\s]+\.[^@\s]+$'
-  
-  if (:IsNullORWhiteSpace($Request.Owner))  {
+  if (:IsNullOrWhiteSpace($Request.Owner))  {
       throw "Owner is Required."
       }
 
-      
+
+
+  $EmailPattern = '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+  
   if (Request.Owneremail -notmatch $EmailPattern)
   {
     throw "Owner email in invalid."
@@ -92,10 +93,10 @@ function Test-RequestPayload {
 
   if ($null -eq $Request.Members)
   {
-    Throw "Memebers field is missing."
+    Throw "Members field is missing."
   }
 
-  foreach ($MEmeber in Request.MEmbers)
+  foreach ($Member in Request.Members)
   {
     if ($Member -notmatch $EmailPattern)
     {
