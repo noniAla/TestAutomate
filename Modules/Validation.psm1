@@ -1,7 +1,7 @@
 function Test-RequestPayload {
   [CmdletBinding()]
   param(
-      [Parameter(Madatory)]
+      [Parameter(Mandatory)]
       $Request
   )
   Write-Host "Starting validation.."
@@ -12,7 +12,7 @@ function Test-RequestPayload {
     "Description",
     "Ownermail",
     "Members",
-    "GroupType",
+    "GroupType"
   )
 
 # I didnt add the "GroupType" because it is not required(optional), But it is allowed when the user chooses to input it so it is in the "AllowedField"
@@ -27,7 +27,7 @@ function Test-RequestPayload {
 # Check for unexpected fields
   foreach ($Property in $Request.PSObject.Properties){
     if ( $Property.Name -notin $AllowedFields){
-      throw "Unexpected filed detected: $(PRoperty.Name)"
+      throw "Unexpected field detected: $($Property.Name)"
       }
   }
 
@@ -41,14 +41,14 @@ function Test-RequestPayload {
     }
  
   
-  $ValidateResourceTypes = @(
+  $ValidateRequestTypes = @(
   "Team",
   "Group",
   "SharePoint"
   )
 
-  if($Request.ResourceType -notin $ValidateResourceTypes) {
-    throw "Invalid Resource Type: $(Request.ResourceType)"
+  if($Request.RequestType -notin $ValidateResourceTypes) {
+    throw "Invalid Resource Type: $($Request.ResourceType)"
     }
     
 
@@ -78,7 +78,7 @@ function Test-RequestPayload {
       throw "Description is Required."
       }    
 
-  if (:IsNullOrWhiteSpace($Request.Owner))  {
+  if (:IsNullOrWhiteSpace($Request.Ownermail))  {
       throw "Owner is Required."
       }
 
@@ -86,7 +86,7 @@ function Test-RequestPayload {
 
   $EmailPattern = '^[^@\s]+@[^@\s]+\.[^@\s]+$'
   
-  if (Request.Owneremail -notmatch $EmailPattern)
+  if ($Request.Ownermail -notmatch $EmailPattern)
   {
     throw "Owner email in invalid."
   }
@@ -96,7 +96,7 @@ function Test-RequestPayload {
     Throw "Members field is missing."
   }
 
-  foreach ($Member in Request.Members)
+  foreach ($Member in $Request.Members)
   {
     if ($Member -notmatch $EmailPattern)
     {
