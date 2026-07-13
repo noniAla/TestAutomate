@@ -1,12 +1,29 @@
+Import-Module .\Modules\Logging.psm1
+
 function Connect-GraphService {
     [CmdletBinding()]
     param()
 
-    Write-Host "Connecting to Microsoft Graph..."
+  
+    try {
+        Write-Host "Connecting to Microsoft Graph..."
 
-    Connect-MgGraph
+        Connect-MgGraph
 
-    Write-Host "Connected."
+        Write-Host "Connected."
+    
+    }
+      # Authentication Exception
+    catch {
+
+    Write-OperationalLog  `
+        -Category "Graph - Authentication Error"  `
+        -Message $_.Exception.Message
+
+        throw
+    }
+
+   
 }
 
 function Get-GraphContextInfo {
@@ -26,7 +43,12 @@ function Test-GraphConnection {
 
         return $true
     }
+
     catch {
+        Write-OperationalLog  `
+        -Category "Graph - Session Unreachable"  `
+        -Message $_.Exception.Message
+
         return $false
     }
 }
