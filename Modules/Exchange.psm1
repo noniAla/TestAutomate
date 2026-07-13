@@ -1,16 +1,3 @@
-
-# Connect to ms sign in page and create a session
-function Connect-ExchangeService {
-  [CmdletBinding()]
-  param()
-  
-  Write-Host "Connecting to Exchange Online..."
-  Connect-ExchangeOnline
-  
-  Write-Host "Connected."
-}
-
-# test if that session is reachable (returns true/false)
 function Test-ExchangeConnection {
 [cmdletBinding()]
 param()
@@ -24,11 +11,15 @@ catch {
   }
 }
 
-# Just to output if the session is active
+
+
+# Show current session info
 function Get-ExchangeContextInfo {
 [cmdletBinding()]
-param([string]$Name)
-Write-Host "Exchange Online session Active."
+param()
+
+Get-ConnectionInforomation   # Show info  about the current authenticated session
+
 }
 
 
@@ -48,4 +39,3 @@ Write-Host "Creating a Mail-Enabled Group: $Name"
 
 
 Export-ModuleMember -Function *
-
