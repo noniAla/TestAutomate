@@ -39,12 +39,97 @@ function New-SharedMailbox {
         [string]$Name,
 
         [Parameter(Mandatory)]
-        [string]$Alias
+        [string]$Alias,
+
+        [Parameter(Mandatory)]
+        [string]$PrimarySmtpAddress
     )
 
-    New-Mailbox `
-        -Shared `
-        -Name $Name `
-        -Alias $Alias
+    $Parameters = @{
+        Shared = $true
+        Name = $DisplayName
+        Alias = $Alias
+    }
+
+    if ($PrimarySmtpAddress) {
+        $Parameters['PrimarySmtpAddres'] = $PrimarySmtpAddress
+    }
+
+    New-Mailbox @Parameters
 }
+#endregion
+
+#region Inclusion in Mailbox"
+
+function Add-SharedMailboxFullAccess {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Identity,
+
+        [Parameter(Mandatory)]
+        [string]$User
+    )
+
+    Add-MailboxPermission `
+        -Identity $Identity `
+        -User $User `
+        -AccessRights FullAccess `
+        -InheritanceType All
+}
+
+function Remove-SharedMailboxFullAccess {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Identity,
+
+        [Parameter(Mandatory)]
+        [string]$User
+    )
+
+    Remove-MailboxPermission `
+        -Identity $Identity `
+        -User $User `
+        -AccessRights FullAccess `
+        -Confirm:$false
+}
+
+#region send as
+
+function Add-SharedMailboxSendAs {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Identity,
+
+        [Parameter(Mandatory)]
+        [string]$User
+    )
+
+    Add-MailboxPermission `
+        -Identity $Identity `
+        -User $User `
+        -AccessRights SendAs `
+        -Confirm:$false
+}
+
+function Remove-SharedMailboxSendAs {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Identity,
+
+        [Parameter(Mandatory)]
+        [string]$User
+    )
+
+    Remove-MailboxPermission `
+        -Identity $Identity `
+        -User $User `
+        -AccessRights SendAs `
+        -Confirm:$false
+}
+#endregion
+
 #endregion
