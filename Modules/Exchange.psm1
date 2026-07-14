@@ -1,76 +1,59 @@
-# Connect to ms sign in page and create a session
-Import-Module .\Modules\Logging.psm1
+Import-Module "$PSScriptRoot\Logging.psm1"
 
+. "$PSScriptRoot\Exchange\DistributionGroups.ps1"
+. "$PSScriptRoot\Exchange\MailEnabledSecurityGroups.ps1"
+. "$PSScriptRoot\Exchange\SharedMailboxes.ps1"
 
 function Connect-ExchangeService {
-  [CmdletBinding()]
-  param()
+    [CmdletBinding()]
+    param()
+    
+    try {
+        Write-OperationalLog `
+            -Category "Exchange Connection" `
+            -Message "Connecting to Exchange Online..."
 
-  try {
-      Write-Host "Connecting to Exchange Online..."
-      Connect-ExchangeOnline
-  
-      Write-Host "Connected."
-  }
 
-  # Authentication Error
-  catch {
-    Write-OperationalLog  `
-        -Category "Exchange - Authentication Error"  `
-        -Message $_.Exception.Message
+        Connect-ExchangeOnline `
+            -ShowBanner:$false
 
-        throw
+        Write-OperationalLog `
+            -Category "Exchange Connection" `
+            -Message "Connected to Exchange Online."
+        }
+    catch {
+        Write-OperationalLog `
+            -Category "Exchange Authentication Error" `
+            -Message $_.Exception.Message
+
+            throw
     }
-
-}
-  
-
-# test if that session is reachable (returns true/false)
-function Test-ExchangeConnection {
-[CmdletBinding()]
-param()
-
-try {
-  Get-AcceptedDomain -ErrorAction Stop | Out-Null 
-  return $true
-}
-catch {
-   Write-OperationalLog  `
-        -Category "Exchange - Session Unreachable"  `
-        -Message $_.Exception.Message
-   return $false     
-  }
 }
 
-
-
-# Show current session info
 function Get-ExchangeContextInfo {
-[CmdletBinding()]
-param()
+    [CmdletBinding()]
+    param()
 
-Get-ConnectionInformation   # Show info  about the current authenticated session
-
+    Get-ConnectionInformation
 }
 
+function Test-ExchangeConnection {
+    [CmdletBinding()]
+    param()
 
-# ------------------------------------------------------   Initial group creation code (Incomplete + will be expanded tommorow)
+    try {
+        Get-AcceptedDomain `
+            -ErrorActio Stop | Out-Null
 
+        return $true
+    }
+    catch {
+        Write-OperationalLog `
+            -Category "Exchange Session Unreachable" `
+            -Message $_.Exception.Message
 
-function New-DistributionList {
-[CmdletBinding()]
-param([string]$Name)
-
-Write-Host "Creating Distribution List: $Name"
+        return $false
+    }
 }
-
-
-# -----------------------------------------------------   Initial group creation code (Incomplete + will be expanded tommorow)
-function New-MailEnabledSecurityGroup{
-[CmdletBinding()]
-param([string]$Name)
-Write-Host "Creating a Mail-Enabled Group: $Name"
-}
-
 
 Export-ModuleMember -Function *
