@@ -18,11 +18,23 @@ function Invoke-TeamProvision {
              throw "An M365 Group named '$($Request.DisplayName)' already exists."
         }
 
+        $OwnerIds = foreach($OwnerEmail in $Request.Owners) {
+            Get-UserIdByEmail `
+                -EmailAddress $OwnerEmail
+        }
+
+        $MemberIds = foreach($MemberEmail in $Request.Members) {
+            Get-UserIdByEmail `
+                -EmailAddress $MemberEmail
+        }
+
         #region Create Backing Group
 
         $Group = New-M365Group `
             -DisplayName $Request.DisplayName `
             -Description $Request.Description
+
+        Start-Sleep -Seconds 15
 
          Write-OperationalLog `
              -Category "Team Provisioning" `
@@ -30,7 +42,7 @@ function Invoke-TeamProvision {
 
             #region Owners
 
-            foreach ($OwnerId in $Request.Owners) {
+            foreach ($OwnerId in $OwnerIds) {
                 
                 Add-GroupOwnership `
                     -GroupId $Group.Id `
@@ -46,7 +58,7 @@ function Invoke-TeamProvision {
 
             #region Add Members
 
-            foreach ($MemberId in $Request.Members) {
+            foreach ($MemberId in $MemberIds) {
                 
                 Add-GroupMembership `
                     -GroupId $Group.Id `
@@ -54,7 +66,7 @@ function Invoke-TeamProvision {
 
                 Write-OperationalLog `
                     -Category "Team Provisioning" `
-                    -Message "Added Member '$Member.Id' to group '$($Group.Id)'."
+                    -Message "Added Member '$MemberId' to group '$($Group.Id)'."
             
             }
 
