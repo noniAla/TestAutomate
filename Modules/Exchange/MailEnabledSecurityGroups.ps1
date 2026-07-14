@@ -47,3 +47,49 @@ function New-MailEnabledSecurityGroup {
 }
 
 #endregion
+
+#region Membershp
+
+function Get-MailEnabledSecurityGroupMembers {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Identity
+    )
+
+    Get-DistributionGroupMember `
+        -Identity $Identity
+}
+
+function Add-MailEnabledSecurityGroupMembership {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Identity,
+
+        [Parameter(Mandatory)]
+        [string]$Member
+    )
+
+    Add-DistributionGroupMember `
+        -Identity $Identity `
+        -Member $Member 
+}
+
+function Remove-MailEnabledSecurityGroupMembership {
+    [CmdletBinding()]
+    params(
+        [Parameter(Mandatory)]
+        [string]$Identity,
+
+        [Parameter(Mandatory)]
+        [string]$Member
+    )
+
+    Remove-DistributionGroupMember `
+        -Identity $Identity `
+        -Member $Member `
+        -Confirm:$false
+}
+
+#endregion
