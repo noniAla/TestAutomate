@@ -78,7 +78,7 @@ function Add-MailEnabledSecurityGroupMembership {
 
 function Remove-MailEnabledSecurityGroupMembership {
     [CmdletBinding()]
-    params(
+    param(
         [Parameter(Mandatory)]
         [string]$Identity,
 
