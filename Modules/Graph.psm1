@@ -1,5 +1,12 @@
 Import-Module .\Modules\Logging.psm1
 
+. "$PSScriptRoot\Graph\Groups.ps1"
+. "$PSScriptRoot\Graph\Teams.ps1"
+. "$PSScriptRoot\Graph\SharePoint.ps1"
+. "$PSScriptRoot\Graph\Users.ps1"
+
+
+# move this to profile.ps1 later
 function Connect-GraphService {
     [CmdletBinding()]
     param()
