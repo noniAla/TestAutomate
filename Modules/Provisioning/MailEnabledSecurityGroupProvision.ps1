@@ -9,26 +9,6 @@ function Invoke-MailEnabledSecurityGroupProvision {
                 -Category "Mail Enabled Security Group Provisioning" `
                 -Message "Starting Mail Enabled Security Group Provisioning for '$($Request.DisplayName)'."
 
-            #region Validation
-
-            if (:IsNullOrWhiteSpace($Request.DisplayName)) {
-                throw "DisplayName is required"
-            }
-
-            if (:IsNullOrWhiteSpace($Request.Alias)) {
-                throw "Alias is Required."
-            }
-
-            if (:IsNullOrWhiteSpace($Request.PrimarySmtpAddress)){
-                throw "PrimarySmtpAddress is required."
-            }
-
-            if(Test-MailEnabledSecurityGroupExists -DisplayName $Request.DisplayName) {
-                throw "A Mail Enabled Security Group named '$($Request.DisplayName)' already exists."
-            }
-
-
-            #endregion
 
             #region Create Group
 
