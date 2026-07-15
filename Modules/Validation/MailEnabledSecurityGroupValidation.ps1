@@ -42,7 +42,7 @@ function Validate-MailEnabledSecurityGroupRequest {
 
 
      #Validate SMTP Format:
-     if ($Request.PrimarySmtp -notmatch  '^[^@]+@[^@]+\.[^@]+$')
+     if ($Request.PrimarySmtp -notmatch  '^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$')
      {
         throw "Primary SMTP address is invalid."
      }
