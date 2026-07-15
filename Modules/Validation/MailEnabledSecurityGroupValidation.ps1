@@ -44,7 +44,7 @@ function Validate-MailEnabledSecurityGroupRequest {
      #Validate SMTP Format:
      if ($Request.PrimarySmtp -notmatch  '^[^@]+@[^@]+\.[^@]+$')
      {
-        throw "PRimary SMTP address is invalid."
+        throw "Primary SMTP address is invalid."
      }
 
 
