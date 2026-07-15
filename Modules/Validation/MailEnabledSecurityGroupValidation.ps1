@@ -39,13 +39,6 @@ function Validate-MailEnabledSecurityGroupRequest {
         throw "At least one member is required."
      }
 
-     
-      # If no owner is assigned
-      if ($null -eq $Request.Owners -or $Request.Owners.Count -eq 0) {
-
-        throw "At least one owner is required."
-     }
-
 
 
      #Validate SMTP Format:
