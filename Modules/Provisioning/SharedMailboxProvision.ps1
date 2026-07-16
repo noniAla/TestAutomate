@@ -18,7 +18,7 @@ function Invoke-SharedMailboxProvision {
             throw "Alias is required."
         }
 
-        if (Test-SharedMailboxExists -Identity $Request.Alias)) {
+        if (Test-SharedMailboxExists -Identity $Request.Alias) {
             throw "A shared mailbox with alias '$($Request.Alias)' already exists."
         }
 
@@ -53,8 +53,15 @@ function Invoke-SharedMailboxProvision {
                 -Category "Shared Mailbox Provisioning" `
                 -Message "Granted Send As permission to '$User'."
         }
+    
     }
     catch {
+
+    Write-OperationalLog `
+                -Category "Shared Mailbox Provisioning Failure" `
+                -Message $_.Exception.Message 
+
+            throw
 
     }
 }
