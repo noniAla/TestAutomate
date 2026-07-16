@@ -18,7 +18,6 @@ function Connect-GraphService {
         Connect-MgGraph
 
         Write-Host "Connected."
-    
     }
       # Authentication Exception
     catch {
@@ -46,7 +45,7 @@ function Test-GraphConnection {
     param()
 
     try {
-        $user = Get-MgUser -Top 1 -ErrorAction Stop
+        Get-MgUser -Top 1 -ErrorAction Stop
 
         return $true
     }
